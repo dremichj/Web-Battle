@@ -1,6 +1,6 @@
 import { initBuffers } from "./init-buffers.js";
 import { drawScene } from "./draw-scene.js";
-import { phyObj } from "./classses.js";
+import { phyObj } from "./classes.js";
 
 let deltaTime = 0;
 
