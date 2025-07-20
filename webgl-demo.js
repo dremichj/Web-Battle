@@ -36,7 +36,7 @@ function main(){
       let relx = (e.offsetX/cx) - cwidth;
       let rely = -(e.offsetY/cy) + cheight;
       console.log(relx+" "+rely);
-      const ob = new phyObj(relx,rely,2,2, canvas);
+      const ob = new phyObj(relx,rely,2,2,1, canvas,"square");
       custObjs.push(ob);
     });
     // button
@@ -44,7 +44,7 @@ function main(){
       const x = parseFloat(document.querySelector("#coord-x").value);
       const y = parseFloat(document.querySelector("#coord-y").value);
       if (!isNaN(x) && !isNaN(y)) {
-        const ob = new phyObj(x,y,2,2,canvas);
+        const ob = new phyObj(x,y,2,2,1,canvas,"square");
         custObjs.push(ob);
       } else{
         console.log("IDIOT");
@@ -52,7 +52,7 @@ function main(){
     });
     // starting
     for (let i =0; i<10; i++){
-      custObjs.push(new phyObj(i,0,0,0,canvas));
+      custObjs.push(new phyObj(i,0,0,0,999,canvas,"square"));
     }
     // set clear color to black
     gl.clearColor(0.0, 0.0, 0.0, 1.0);

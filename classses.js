@@ -1,14 +1,21 @@
 
 export class phyObj {
-  constructor(startX, startY, startVx, startVy, canvas){
+  constructor(startX, startY, startVx, startVy, mass, canvas, shape){
+    // movement
     this.x = startX;
     this.y = startY;
     this.vx = startVx;
     this.vy = startVy;
+
+    // collisions
+    this.mass = mass
     this.canvas = canvas;
     this.aspect = canvas.clientWidth / canvas.clientHeight;
     this.width = 7;
     this.height = this.width/this.aspect;
+    
+    // shape
+    this.shape = shape;
   }
 
   getX(){
@@ -24,26 +31,22 @@ export class phyObj {
   }
   collisionDetection(){
     
-    /*if (this.x >=this.width-0.5 || this.x <=-this.width+0.5){
-        
-        this.vx*=-1;
-    }
-    if (this.y >=this.height-0.5 || this.y <=-this.height+0.5){
-        this.vy*=-1;
-    }*/
-    if (this.x >this.width-0.5){
-        this.x = this.width-0.5
-        this.vx*=-1;
-    } else if (this.x <-this.width+0.5){
-        this.x = -this.width+0.5
-        this.vx*=-1;
-    }
-    if (this.y >this.height-0.5){
-        this.y = this.height-0.5
-        this.vy*=-1;
-    } else if (this.y <-this.height+0.5){
-        this.y = -this.height+0.5
-        this.vy*=-1;
+    // edges
+    if (this.mass != 999){
+        if (this.x >this.width-0.5){
+            this.x = this.width-0.5
+            this.vx*=-1;
+        } else if (this.x <-this.width+0.5){
+            this.x = -this.width+0.5
+            this.vx*=-1;
+        }
+        if (this.y >this.height-0.5){
+            this.y = this.height-0.5
+            this.vy*=-1;
+        } else if (this.y <-this.height+0.5){
+            this.y = -this.height+0.5
+            this.vy*=-1;
+        }
     }
   }
 }
