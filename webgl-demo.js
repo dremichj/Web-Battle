@@ -36,7 +36,7 @@ function main(){
       let relx = (e.offsetX/cx) - cwidth;
       let rely = -(e.offsetY/cy) + cheight;
       console.log(relx+" "+rely);
-      const ob = new phyObj(relx,rely,2,2,1, canvas,"square");
+      const ob = new phyObj(relx,rely,2,2,1, canvas,document.querySelector("#shapetxt").value);
       custObjs.push(ob);
     });
     // button

@@ -84,18 +84,47 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
 
     // tell webgl to pull the positions from the position buffer into the vertexPosition attribute
    
-    for (const cube of custObjs){
+    for (const obj of custObjs){
+        // create viewmodelmatrix
         const modelViewMatrix = mat4.create();
-        mat4.translate(modelViewMatrix, modelViewMatrix, [cube.getX(),cube.getY(),0]);
+        mat4.translate(modelViewMatrix, modelViewMatrix, [obj.getX(),obj.getY(),0]);
         gl.uniformMatrix4fv(
           programInfo.uniformLocations.modelViewMatrix,
           false,
           modelViewMatrix,  
         );
-        {
-            const offset = 0;
-            const vertexCount = 4;
-            gl.drawArrays(gl.TRIANGLE_STRIP,offset,vertexCount);
+        // choose which position buffer based on shape
+        let positionBuffer, vertexCount;
+        switch (obj.shape){
+            default:
+                positionBuffer = buffers.positionSquare;
+                vertexCount = 4;
+                break;
+            case "triangle":
+                positionBuffer = buffers.positionTriangle;
+                vertexCount = 3;
+        }
+        // bind position buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexPosition,
+            3, gl.FLOAT, false, 0,0
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+        // bind color buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER,buffers.color);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexColor,
+            4, gl.FLOAT, false,0,0
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+
+        switch (obj.shape){
+            default:
+                gl.drawArrays(gl.TRIANGLE_STRIP,0,vertexCount);
+                break;
+            case "triangle":
+                gl.drawArrays(gl.TRIANGLES,0,vertexCount);
         }
     }
 
