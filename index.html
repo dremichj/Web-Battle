@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>WebGL Demo</title>
+    <title>Web Battle!</title>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
       integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
@@ -16,7 +16,10 @@
     <input type = "number" id = "coord-x" placeholder="X coordinate">
     <input type = "number" id = "coord-y" placeholder="Y coordinate">
     <button id = "add-cube">Add Cube</button>
-    <input type = "text" id = "shapetxt" placeholder="what shape">
+    <select id = "shapetxt">
+      <option value="square">Square</option>
+      <option value="triangle">Triangle</option>
+    </select>
     <canvas id="gl-canvas" width="960" height="540"></canvas>
   </body>
 </html>

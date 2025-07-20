@@ -44,16 +44,17 @@ function main(){
       const x = parseFloat(document.querySelector("#coord-x").value);
       const y = parseFloat(document.querySelector("#coord-y").value);
       if (!isNaN(x) && !isNaN(y)) {
-        const ob = new phyObj(x,y,2,2,1,canvas,"square");
+        const ob = new phyObj(x,y,2,2,1,canvas,document.querySelector("#shapetxt").value);
         custObjs.push(ob);
       } else{
         console.log("IDIOT");
       }
     });
     // starting
-    for (let i =0; i<10; i++){
+    /*for (let i =0; i<10; i++){
       custObjs.push(new phyObj(i,0,0,0,999,canvas,"square"));
-    }
+    }*/
+
     // set clear color to black
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     
