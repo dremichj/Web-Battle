@@ -1,0 +1,227 @@
+.red{
+    color: red;
+}
+.thick{
+   font-size:20px;
+}
+.green{
+   color:green;
+}
+
+/*
+   COLORS
+   Background blue: #0D1B2A
+   Menu bar gray: #1B263B
+   Blue3: #415A77
+   Blue4: #778DA9
+   White: #E0E1DD
+*/
+
+
+:root {
+   --blue5: #0D1B2A;
+   --blue4: #1B263B;
+   --blue3: #415A77;
+   --blue2: #778DA9;
+   --blue1: #E0E1DD;
+}
+
+body{
+   margin: 0;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   background-color: var(--blue5);
+}
+
+.top-container {
+   width: 50%;
+   min-width: 500px;
+   margin: 10px auto;
+}
+
+@media only screen and (max-width:700px) {
+   .top-container{
+      width:90%;
+      height:100px;
+   }
+}
+
+.top-bar {
+   position: relative;
+   background-color:var(--blue4);
+   padding:10px;
+   display:flex;
+   align-items: center;
+   justify-content: space-between;
+   border-radius: 10px;
+}
+ 
+
+.left {
+   z-index: 1;
+}
+
+.center {
+   position:absolute;
+   left: 50%;
+   transform: translateX(-50%);
+}
+
+.right{
+   z-index: 1;
+}
+
+.logo-wrapper{
+   position:relative;
+   width:19px;
+   height:19px;
+}
+
+.logo-hover{
+   opacity:0;
+   transition: opacity 0.2s ease;
+}
+
+.home-link {
+   display: inline-flex;
+   align-items: center;
+   gap: 5px;
+   text-decoration: none;
+   color: var(--blue1);
+   background-color: var(--blue4);
+   border: 2px solid var(--blue2);
+   padding: 10px;
+   border-radius: 15px;
+   transition: all 0.2s ease;
+   position:relative;
+}
+
+.home-link:hover {
+   background-color: var(--blue1);
+   color:black;
+   border-color: var(--blue4);
+}
+
+.home-link:hover .logo-hover{
+   opacity:1;
+}
+
+.home-link:hover .logo-default{
+   opacity:0;
+}
+
+
+.center h1 {
+   margin:10px 5px;
+   color:var(--blue1);
+   /*text-shadow: 
+      calc(-1*var(--top-outline-size)) calc(-1*var(--top-outline-size)) 0 var(--top-outline-color),
+      var(--top-outline-size) calc(-1*var(--top-outline-size)) 0 var(--top-outline-color),
+      calc(-1*var(--top-outline-size)) var(--top-outline-size) 0 var(--top-outline-color),
+      var(--top-outline-size) var(--top-outline-size) 0 var(--top-outline-color);
+   */
+}
+
+.column-container{
+   display:grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 20px;
+   width: 80%;
+   margin: 100px auto;
+}
+
+.column-box{
+display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 100px;
+  height: 300px;
+  background-color: var(--blue3);
+  border-radius: 10px;
+  border: 2px solid var(--blue2);
+  padding: 15px;
+  box-sizing: border-box;
+  color: var(--blue1);
+}
+
+
+.skill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.skillbox{
+   background-color: var(--blue2);
+   color:var(--blue1);
+   padding:4px 10px;
+   border-radius: 15px;
+   font-size:16px;
+   flex:0 0 auto;
+   white-space: nowrap;
+}
+
+.project-content{
+   flex-grow: 0;
+}
+
+.project-content h3{
+   margin: 0;
+   font-size:30px;
+}
+
+.project-content p{
+   margin: 15px 0 0 0;
+   font-size:15px;
+}
+
+.project-link {
+  margin-left: auto;
+  background-color: var(--blue4);
+  padding: 4px;
+  font-size: 0.8rem;
+  display:flex;
+  align-items: center;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.github-logo-wrapper{
+   position:relative;
+   width:20px;
+   height:20px;
+   display:inline-block;
+}
+
+.github-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.github-logo.default{
+   opacity: 1;
+}
+
+.github-logo.hover{
+   opacity: 0;
+}
+
+.project-link:hover .github-logo.default{
+   opacity: 0;
+}
+
+.project-link:hover .github-logo.hover{
+   opacity: 1;
+}
+
+.project-link:hover{
+   background-color: var(--blue1);
+}
