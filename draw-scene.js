@@ -5,7 +5,7 @@
  * @param {Object} buffers
  */
 
-export function drawScene(gl, programInfo, buffers, cubeRotation,custObjs) {
+export function drawScene(gl, programInfo, buffers,custObjs) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
@@ -22,18 +22,58 @@ export function drawScene(gl, programInfo, buffers, cubeRotation,custObjs) {
     // and we only want to see objects between 0.1 units
     // and 100 units away from the camera.
 
-    const fieldOfView = (45 * Math.PI) / 180; // turn to radians
+    /*const fieldOfView = (45 * Math.PI) / 180; // turn to radians
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.1;
-    const zFar = 100;
+    const zFar = 100;*/
     const projectionMatrix = mat4.create();
 
-    // glmatrix always has the first argument
-    // as the destination
-    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const width = 7;
+    const height = width/aspect;
+    mat4.ortho(projectionMatrix, -width, width, -height, height, -1, 1);
 
     // tell webgl to use our program when drawing
     gl.useProgram(programInfo.program);
+
+    // Bind vertex position buffer
+    {
+        const numComponents = 3;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+        programInfo.attribLocations.vertexPosition,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    }
+
+    // Bind vertex color buffer
+    {
+        const numComponents = 4;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+        gl.vertexAttribPointer(
+        programInfo.attribLocations.vertexColor,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+    }
 
     // set shader uniforms
     gl.uniformMatrix4fv(
@@ -43,76 +83,22 @@ export function drawScene(gl, programInfo, buffers, cubeRotation,custObjs) {
     );
 
     // tell webgl to pull the positions from the position buffer into the vertexPosition attribute
-    setPositionAttribute(gl, buffers, programInfo);
-    setColorAttribute(gl,buffers,programInfo);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,buffers.indices);
-
-
-
-    const vertexCount = 6;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
-
+   
     for (const cube of custObjs){
         const modelViewMatrix = mat4.create();
-        mat4.translate(modelViewMatrix, modelViewMatrix, [cube.getX(),cube.getY(),-15.0]);
+        mat4.translate(modelViewMatrix, modelViewMatrix, [cube.getX(),cube.getY(),0]);
         gl.uniformMatrix4fv(
           programInfo.uniformLocations.modelViewMatrix,
           false,
           modelViewMatrix,  
         );
-        gl.drawElements(gl.TRIANGLES,vertexCount,type,offset);
+        {
+            const offset = 0;
+            const vertexCount = 4;
+            gl.drawArrays(gl.TRIANGLE_STRIP,offset,vertexCount);
+        }
     }
 
     
 
 }
-
-/**
- * @param {WebGLRenderingContext} gl
- * @param {Object} programInfo
- * @param {Object} buffers
- */
-
-// tell webgl how ot pull out the positions from the position buffer into the vertexPosition Attrib
-function setPositionAttribute(gl,buffers,programInfo){
-    const numComponents = 3; // pull out 2 values per iteration
-    const type = gl.FLOAT; // the data in the buffer is 32bit floats
-    const normalize = false; // don't normalize
-    const stride = 0; // how many bytes to get from one set of values to the next
-    // 0 = use type and numComponents above
-    const offset = 0; // how many bytes inside the buffer to start from
-    gl.bindBuffer(gl.ARRAY_BUFFER,buffers.position);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset,
-    );
-
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-
-}
-
-
-function setColorAttribute(gl,buffers,programInfo){
-    const numComponents = 4;
-    const type = gl.FLOAT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexColor,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset,
-    );
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
-}
-

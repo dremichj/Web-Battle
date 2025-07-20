@@ -1,8 +1,7 @@
 import { initBuffers } from "./init-buffers.js";
 import { drawScene } from "./draw-scene.js";
+import { phyObj } from "./classses.js";
 
-
-let cubeRotation = 0.0;
 let deltaTime = 0;
 
 let custObjs = [];
@@ -11,16 +10,7 @@ main();
 
 
 function main(){
-    document.querySelector("#add-cube").addEventListener("click", () => {
-      const x = parseFloat(document.querySelector("#coord-x").value);
-      const y = parseFloat(document.querySelector("#coord-y").value);
-      if (!isNaN(x) && !isNaN(y)) {
-        const ob = new phyObj(x,y,2,2);
-        custObjs.push(ob);
-      } else{
-        console.log("IDIOT");
-      }
-    });
+    
     
 
     /** @type {HTMLCanvasElement} */
@@ -35,19 +25,35 @@ function main(){
         return;
     }
     
+    /// Section for creating objects
     //find variable for adjusting offsetX and Y to spawn a cube
     let cwidth = 7;
     let cheight = 4;
     let cx = canvas.width/(cwidth*2);
     let cy = canvas.height/(cheight*2);
+    // click 
     canvas.addEventListener('click', (e) =>{
       let relx = (e.offsetX/cx) - cwidth;
       let rely = -(e.offsetY/cy) + cheight;
       console.log(relx+" "+rely);
-      const ob = new phyObj(relx,rely,2,2);
+      const ob = new phyObj(relx,rely,2,2, canvas);
       custObjs.push(ob);
     });
-
+    // button
+    document.querySelector("#add-cube").addEventListener("click", () => {
+      const x = parseFloat(document.querySelector("#coord-x").value);
+      const y = parseFloat(document.querySelector("#coord-y").value);
+      if (!isNaN(x) && !isNaN(y)) {
+        const ob = new phyObj(x,y,2,2,canvas);
+        custObjs.push(ob);
+      } else{
+        console.log("IDIOT");
+      }
+    });
+    // starting
+    for (let i =0; i<10; i++){
+      custObjs.push(new phyObj(i,0,0,0,canvas));
+    }
     // set clear color to black
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     
@@ -104,8 +110,7 @@ function main(){
         for (const c of custObjs){
           c.updatePos(deltaTime);
         }
-        drawScene(gl,programInfo,buffers,cubeRotation,custObjs);
-        cubeRotation+=deltaTime;
+        drawScene(gl,programInfo,buffers,custObjs);
         requestAnimationFrame(render);
     }
     // Requestanimframe will ask the browser to call render on each
@@ -125,12 +130,12 @@ function initShaderProgram(gl,vsSource,fsSource){
     gl.attachShader(shaderProgram,fragmentShader);
     gl.linkProgram(shaderProgram);
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert(
-      `Unable to initialize the shader program: ${gl.getProgramInfoLog(
-        shaderProgram,
-      )}`,
-    );
-    return null;
+      alert(
+        `Unable to initialize the shader program: ${gl.getProgramInfoLog(
+          shaderProgram,
+        )}`,
+      );
+      return null;
     }
 
     return shaderProgram;
@@ -155,33 +160,4 @@ function loadShader(gl,type,source){
         return null;
     }
     return shader;
-}
-
-class phyObj {
-  constructor(startX, startY, startVx, startVy){
-    this.x = startX;
-    this.y = startY;
-    this.vx = startVx;
-    this.vy = startVy;
-  }
-
-  getX(){
-    return this.x;
-  }
-  getY(){
-    return this.y;
-  }
-  updatePos(deltaTime){
-    this.collisionDetection();
-    this.x = this.x + this.vx*deltaTime;
-    this.y = this.y + this.vy*deltaTime;
-  }
-  collisionDetection(){
-    if (this.x >=7 || this.x <=-7){
-      this.vx*=-1;
-    }
-    if (this.y >=5 || this.y <=-5){
-      this.vy*=-1;
-    }
-  }
 }
