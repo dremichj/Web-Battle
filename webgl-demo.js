@@ -108,6 +108,8 @@ function main(){
         now *= 0.001;
         deltaTime = now-then;
         then = now;
+        //check for collision
+        phyObj.checkAllCircleCollisions(custObjs);
         for (const c of custObjs){
           c.updatePos(deltaTime);
         }

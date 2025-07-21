@@ -6,7 +6,7 @@
  */
 
 export function drawScene(gl, programInfo, buffers,custObjs) {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.1, 0.1, 0.1, 1.0);
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
@@ -94,15 +94,27 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
           modelViewMatrix,  
         );
         // choose which position buffer based on shape
-        let positionBuffer, vertexCount;
+        let positionBuffer, colorBuffer, vertexCount, drawMode;
         switch (obj.shape){
             default:
                 positionBuffer = buffers.positionSquare;
+                colorBuffer = buffers.colorSquare
                 vertexCount = 4;
+                drawMode = gl.TRIANGLE_STRIP;
                 break;
             case "triangle":
                 positionBuffer = buffers.positionTriangle;
+                colorBuffer = buffers.colorTriangle
                 vertexCount = 3;
+                drawMode = gl.TRIANGLES;
+                break;
+            case "circle":
+                positionBuffer = buffers.positionCircle;
+                colorBuffer = buffers.colorCircle
+                vertexCount = 34;
+                drawMode = gl.TRIANGLE_FAN;
+                break;
+
         }
         // bind position buffer
         gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
@@ -111,21 +123,17 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
             3, gl.FLOAT, false, 0,0
         );
         gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+
         // bind color buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER,buffers.color);
+        gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
         gl.vertexAttribPointer(
             programInfo.attribLocations.vertexColor,
             4, gl.FLOAT, false,0,0
         );
         gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
 
-        switch (obj.shape){
-            default:
-                gl.drawArrays(gl.TRIANGLE_STRIP,0,vertexCount);
-                break;
-            case "triangle":
-                gl.drawArrays(gl.TRIANGLES,0,vertexCount);
-        }
+        
+        gl.drawArrays(drawMode,0,vertexCount);
     }
 
     
