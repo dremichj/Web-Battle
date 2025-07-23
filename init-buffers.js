@@ -11,17 +11,18 @@ function initBuffers(gl){
         positionCircle: positionBufferCircle,
         colorSquare: colorBuffer.square,
         colorCircle: colorBuffer.circle,
-        colorTriangle: colorBuffer.triangle
+        colorTriangle: colorBuffer.triangle,
+        colorRed: colorBuffer.red,
     };
 }
 
 function initSquarePositionBuffer(gl){
     //create an array of positions for the square
     const positions = [
-        -0.5, 0.5, 0.0,  // top left
-        -0.5, -0.5, 0.0, // bottom left
-        0.5, 0.5, 0.0,   // top right
-        0.5, -0.5, 0.0   // bottom right
+        -0.5, 0.5, 0.1,  // top left
+        -0.5, -0.5, 0.1, // bottom left
+        0.5, 0.5, 0.1,   // top right
+        0.5, -0.5, 0.1   // bottom right
         
     ];
 
@@ -97,9 +98,12 @@ function initColorBuffer(gl){
     const circleVertexCount = 34;
     const colorsCircle = [];
     for (let i = 0; i<circleVertexCount; i++){
-        colorsCircle.push(i/circleVertexCount,i/circleVertexCount,i/circleVertexCount,i/circleVertexCount);
+        colorsCircle.push(0,0,1.0,1.0);
     }
-
+    const colorsCircleRed = [];
+    for (let i = 0; i<circleVertexCount; i++){
+        colorsCircleRed.push(1.0,0,0,1.0);
+    }
 
     const colorBufferSquare = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBufferSquare);
@@ -113,11 +117,15 @@ function initColorBuffer(gl){
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBufferCircle);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsCircle), gl.STATIC_DRAW);
 
+    const colorBufferRed = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBufferRed);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsCircleRed), gl.STATIC_DRAW);
+
     return {
         square: colorBufferSquare,
         triangle: colorBufferTriangle,
         circle: colorBufferCircle,
+        red: colorBufferRed,
     };
 }
-
 export { initBuffers };

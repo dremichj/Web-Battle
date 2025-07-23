@@ -3,9 +3,10 @@ import { drawScene } from "./draw-scene.js";
 import { phyObj } from "./classes.js";
 
 let deltaTime = 0;
-
 let custObjs = [];
 
+let pause = false;
+const ts = mat3.create();
 main();
 
 
@@ -31,6 +32,7 @@ function main(){
     let cheight = 4;
     let cx = canvas.width/(cwidth*2);
     let cy = canvas.height/(cheight*2);
+    phyObj.initGrid(2*cwidth,2*cheight);
     // click 
     canvas.addEventListener('click', (e) =>{
       let relx = (e.offsetX/cx) - cwidth;
@@ -54,6 +56,13 @@ function main(){
     /*for (let i =0; i<10; i++){
       custObjs.push(new phyObj(i,0,0,0,999,canvas,"square"));
     }*/
+    canvas.addEventListener('keydown',(e) =>{
+      if (e.key === " "){
+        //pause = !pause;
+        phyObj.toGrid(custObjs,cwidth,cheight);
+        console.log(ts.tostring);
+      }
+    });
 
     // set clear color to black
     gl.clearColor(0.5, 0.5, 0.5, 1.0);
@@ -109,9 +118,12 @@ function main(){
         deltaTime = now-then;
         then = now;
         //check for collision
-        phyObj.checkAllCircleCollisions(custObjs);
-        for (const c of custObjs){
-          c.updatePos(deltaTime);
+        if (!pause){
+          phyObj.toGrid(custObjs,cwidth,cheight);
+          phyObj.checkAllCircleCollisions(custObjs);
+          for (const c of custObjs){
+            c.updatePos(deltaTime);
+          }
         }
         drawScene(gl,programInfo,buffers,custObjs);
         requestAnimationFrame(render);

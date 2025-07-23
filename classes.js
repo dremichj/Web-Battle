@@ -1,5 +1,8 @@
 
 export class phyObj {
+  static colGrid = [];
+  static gridWidth;
+  static gridHeight;
   constructor(startX, startY, startVx, startVy, mass, canvas, shape){
     // movement
     this.x = startX;
@@ -13,6 +16,7 @@ export class phyObj {
     this.aspect = canvas.clientWidth / canvas.clientHeight;
     this.width = 7;
     this.height = this.width/this.aspect;
+    this.collide= false;
     
     // shape
     this.shape = shape;
@@ -49,22 +53,48 @@ export class phyObj {
         }
     }
   }
+
+  // collision grid
+  static initGrid(width=10,height=10){
+    this.gridWidth = width;
+    this.gridHeight = height;
+    this.colGrid=[];
+    for(let i =0; i<height;i++){
+      let a = [];
+      for(let j =0; j<width;j++){
+          a.push([]);
+      }
+      this.colGrid.push(a);
+    };
+  }
+  // add objs to colgrid
+  static toGrid(custObjs,cwidth,cheight){
+    this.initGrid(this.gridWidth,this.gridHeight);
+    for(const obj of custObjs){
+      // sets relx and rely to the place they should be in the array
+      // sets value between 0 and 2cwidth, divides by 2cwidth to be from 0 to 1,
+      // then multiplies by how many items fit in the width/height
+      let relx = Math.floor(((obj.x+cwidth)/(2*cwidth))*this.gridWidth);
+      let rely = this.gridHeight-Math.floor(((obj.y+cheight)/(2*cheight))*this.gridHeight)-1;
+      this.colGrid[rely][relx].push(obj);
+    }
+  }
+  
+
   static checkAllCircleCollisions(custObjs,radius = 0.5){
-    for(let i = 0; i<custObjs.length;i++){
-      const a = custObjs[i];
-      if (a.shape !== "circle") continue;
-      for(let j = i+1; j<custObjs.length;j++){
-        const b = custObjs[j];
-        if (b.shape !== "circle") continue;
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const distSq = dx*dx+dy*dy;
-        const minDist=2*radius;
-        if(distSq<minDist*minDist){
-          [a.vx,b.vx]=[b.vx,a.vx];
-          [a.vy,b.vy]=[b.vy,a.vy];
+    for (const obj of custObjs){
+      obj.collide=false;
+    }
+    for (let r =0; r<this.gridHeight;r++){
+      for (let c = 0; c<this.gridWidth;c++){
+        if (this.colGrid[r][c].length>1){
+          this.colGrid[r][c][0].collide = true;
+          this.colGrid[r][c][1].collide = true;
         }
       }
     }
+      
   }
+
+
 }

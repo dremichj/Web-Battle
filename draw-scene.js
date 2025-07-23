@@ -110,7 +110,11 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
                 break;
             case "circle":
                 positionBuffer = buffers.positionCircle;
-                colorBuffer = buffers.colorCircle
+                if (obj.collide){
+                    colorBuffer = buffers.colorRed;
+                }else{
+                    colorBuffer = buffers.colorCircle;
+                }
                 vertexCount = 34;
                 drawMode = gl.TRIANGLE_FAN;
                 break;
