@@ -14,7 +14,11 @@ export class phyObj {
     this.ay = 1;
 
     // collisions
-    this.mass = mass
+    
+    this.mass = mass;
+    if (mass ===""){
+      this.mass =1;
+    }
     this.canvas = canvas;
     this.aspect = canvas.clientWidth / canvas.clientHeight;
     this.width = 7;
@@ -119,7 +123,7 @@ export class phyObj {
 
               let curD = distOf(obj.x,obj.y,othObj.x,othObj.y);
               if(curD <= (radius*2)*(radius*2)){
-                //this.handleCollision(obj,othObj);
+                this.handleCollision(obj,othObj);
                 obj.collide = true;
                 othObj.collide = true;
               }
@@ -135,9 +139,18 @@ export class phyObj {
     // sets relx and rely to the place they should be in the array
     // sets value between 0 and 2cwidth, divides by 2cwidth to be from 0 to 1,
     // then multiplies by how many items fit in the width/height
-    console.log(x+" "+ y);
     let relx = Math.floor(((x+this.gridWidth/2)/(this.gridWidth))*this.gridWidth);
     let rely = this.gridHeight-Math.floor(((y+this.gridHeight/2)/(this.gridHeight))*this.gridHeight)-1;
+    if (relx <0){
+      relx = 0
+    } else if (relx >=this.gridWidth){
+      relx = this.gridWidth-1;
+    }
+    if (rely <0){
+      rely = 0
+    } else if (rely >=this.gridHeight){
+      rely = this.gridHeight-1;
+    }
     return [relx,rely];
   }
 
@@ -168,6 +181,7 @@ export class phyObj {
       // find tangent vector
       const utx = -uny;
       const uty = unx;
+      
 
       // **Separate overlapping objects**
       const radiusSum = 0.5 + 0.5; // Assuming radius = 0.5 for both objects
@@ -192,11 +206,13 @@ export class phyObj {
       const v1t = v1x*utx+v1y*uty;
       const v2n = v2x*unx+v2y*uny;
       const v2t = v2x*utx+v2y*uty;
-
+      
       const v1nFinal = (v1n*(m1-m2)+2*m2*v2n)/(m1+m2);
       const v2nFinal = (v2n*(m2-m1)+2*m1*v1n)/(m1+m2);
+
       
       // final velocities
+      
       obj.vx = v1nFinal * unx +v1t*utx;
       obj.vy = v1nFinal * uny +v1t*uty;
       othObj.vx = v2nFinal * unx +v2t*utx;
