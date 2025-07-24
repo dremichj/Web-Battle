@@ -6,7 +6,6 @@ let deltaTime = 0;
 let custObjs = [];
 
 let pause = false;
-const ts = mat3.create();
 main();
 
 
@@ -37,8 +36,7 @@ function main(){
     canvas.addEventListener('click', (e) =>{
       let relx = (e.offsetX/cx) - cwidth;
       let rely = -(e.offsetY/cy) + cheight;
-      console.log(relx+" "+rely);
-      const ob = new phyObj(relx,rely,2,2,1, canvas,document.querySelector("#shapetxt").value);
+      const ob = new phyObj(relx,rely,document.querySelector("#coord-x").value,document.querySelector("#coord-y").value,document.querySelector("#mass").value, canvas,document.querySelector("#shapetxt").value);
       custObjs.push(ob);
     });
     // button
@@ -58,9 +56,8 @@ function main(){
     }*/
     canvas.addEventListener('keydown',(e) =>{
       if (e.key === " "){
-        //pause = !pause;
-        phyObj.toGrid(custObjs,cwidth,cheight);
-        console.log(ts.tostring);
+        pause = !pause;
+        phyObj.toGrid(custObjs);
       }
     });
 
@@ -119,7 +116,7 @@ function main(){
         then = now;
         //check for collision
         if (!pause){
-          phyObj.toGrid(custObjs,cwidth,cheight);
+          phyObj.toGrid(custObjs);
           phyObj.checkAllCircleCollisions(custObjs);
           for (const c of custObjs){
             c.updatePos(deltaTime);
