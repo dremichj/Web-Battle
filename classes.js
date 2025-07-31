@@ -11,7 +11,7 @@ export class phyObj {
     this.y = startY;
     this.vx = startVx;
     this.vy = startVy;
-    this.ay = 1;
+    this.ay = 0; // gravity
 
     // collisions
     
@@ -155,7 +155,7 @@ export class phyObj {
   }
 
   static handleCollision(obj, othObj){
-    if (!obj.collide){
+    if (!obj.collide || true){
       obj.collide = true;
       othObj.collide = true;
       // mass
@@ -182,24 +182,7 @@ export class phyObj {
       const utx = -uny;
       const uty = unx;
       
-
-      // **Separate overlapping objects**
-      const radiusSum = 0.5 + 0.5; // Assuming radius = 0.5 for both objects
-      const overlap = radiusSum - dist;
-      if (overlap > 0) {
-          // Move objects apart based on their masses
-          const totalMass = m1 + m2;
-          const objMove = (overlap * (m2 / totalMass)); // Proportional to othObj's mass
-          const othObjMove = (overlap * (m1 / totalMass)); // Proportional to obj's mass
-
-          // Move obj
-          obj.x += objMove * unx;
-          obj.y += objMove * uny;
-
-          // Move othObj
-          othObj.x -= othObjMove * unx;
-          othObj.y -= othObjMove * uny;
-      }
+      this.separateOverlap(obj, othObj, 0.5, 0.5, unx, uny, dist);
       
       // project velocities onto normal and tangent
       const v1n = v1x*unx+v1y*uny;
@@ -213,10 +196,40 @@ export class phyObj {
       
       // final velocities
       
-      obj.vx = v1nFinal * unx +v1t*utx;
-      obj.vy = v1nFinal * uny +v1t*uty;
-      othObj.vx = v2nFinal * unx +v2t*utx;
-      othObj.vy = v2nFinal * uny +v2t*uty;
+      //obj.vx = v1nFinal * unx +v1t*utx;
+      //obj.vy = v1nFinal * uny +v1t*uty;
+      //othObj.vx = v2nFinal * unx +v2t*utx;
+      //othObj.vy = v2nFinal * uny +v2t*uty;
+    }
+  }
+
+  static separateOverlap(obj, othObj, radA, radB,unx,uny, dist){
+    const m1 = obj.mass;
+    const m2 = othObj.mass;
+    const radiusSum = radA + radB; // Assuming radius = 0.5 for both objects
+      const overlap = radiusSum - dist;
+      if (overlap > 0) {
+          // Move objects apart based on their masses
+          const totalMass = m1 + m2;
+          const objMove = (overlap * (m2 / totalMass)); // Proportional to othObj's mass
+          const othObjMove = (overlap * (m1 / totalMass)); // Proportional to obj's mass
+
+          // Move obj
+          obj.x += overlap/2 * unx;
+          obj.y += overlap/2 * uny;
+
+          // Move othObj
+          othObj.x -= overlap/2 * unx;
+          othObj.y -= overlap/2 * uny;
+      }
+  }
+
+  static getLaunchV(oldX, oldY, newX, newY){
+    const velX = -(newX-oldX)/10;
+    const velY = (newY-oldY)/10;
+    return{
+      Vx:velX,
+      Vy:velY,
     }
   }
 }

@@ -17,16 +17,21 @@
     <!--Loading Menus-->
     <div id = "header-placeholder"></div>
     <script src="Header/load-menus.js"></script>
-    
-    <input type = "number" id = "coord-x" placeholder="X Velocity">
-    <input type = "number" id = "coord-y" placeholder="Y Velocity">
-    <input type = "number" id = "mass" placeholder="Mass">
-    <button id = "add-cube">Add Cube</button>
-    <select id = "shapetxt">
+    <div class="center-container">
+      <canvas tabindex='1' id="gl-canvas" width="960" height="540"></canvas>
+    </div>
+    <div class="center-container">
+      <input type = "number" id = "coord-x" placeholder="X Velocity">
+      <input type = "number" id = "coord-y" placeholder="Y Velocity">
+      <input type = "number" id = "mass" placeholder="Mass">
+      <button id = "add-cube">Add Cube</button>
+      <select id = "shapetxt">
       <option value="square">Square</option>
       <option value="triangle">Triangle</option>
       <option value="circle">Circle</option>
-    </select>
-    <canvas tabindex='1' id="gl-canvas" width="960" height="540"></canvas>
+      </select>
+      <button id = "clear">Clear</button>
+    </div>
+    
   </body>
 </html>

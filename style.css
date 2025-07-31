@@ -225,3 +225,9 @@ display: flex;
 .project-link:hover{
    background-color: var(--blue1);
 }
+
+.center-container{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}

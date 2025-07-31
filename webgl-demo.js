@@ -5,6 +5,10 @@ import { phyObj } from "./classes.js";
 let deltaTime = 0;
 let custObjs = [];
 
+let mouseDx = 0;
+let mouseDy = 0;
+let newob;
+
 let pause = false;
 main();
 
@@ -33,12 +37,18 @@ function main(){
     let cy = canvas.height/(cheight*2);
     phyObj.initGrid(2*cwidth,2*cheight);
     // click 
-    canvas.addEventListener('click', (e) =>{
-      let relx = (e.offsetX/cx) - cwidth;
-      let rely = -(e.offsetY/cy) + cheight;
-      const ob = new phyObj(relx,rely,document.querySelector("#coord-x").value,document.querySelector("#coord-y").value,document.querySelector("#mass").value, canvas,document.querySelector("#shapetxt").value);
+    canvas.addEventListener('mousedown',(e)=>{
+      mouseDx = e.offsetX;
+      mouseDy = e.offsetY;
+    });
+    canvas.addEventListener('mouseup',(e)=>{
+      let relx = (mouseDx/cx) - cwidth;
+      let rely = -(mouseDy/cy) + cheight;
+      const velV = phyObj.getLaunchV(mouseDx,mouseDy,e.offsetX,e.offsetY);
+      const ob = new phyObj(relx,rely,velV.Vx,velV.Vy,document.querySelector("#mass").value, canvas,document.querySelector("#shapetxt").value);
       custObjs.push(ob);
     });
+
     // button
     document.querySelector("#add-cube").addEventListener("click", () => {
       const x = parseFloat(document.querySelector("#coord-x").value);
@@ -59,7 +69,27 @@ function main(){
         pause = !pause;
         phyObj.toGrid(custObjs);
       }
+      if (e.key === "ArrowUp"){
+        custObjs[0].vy = 2;
+      }
+      if (e.key === "ArrowDown"){
+        custObjs[0].vy = -2;
+      }
+      if (e.key === "ArrowRight"){
+        custObjs[0].vx = 2;
+      }
+      if (e.key === "ArrowLeft"){
+        custObjs[0].vx = -2;
+      }
     });
+    canvas.addEventListener('keyup',(e)=>{
+      if (e.key === "ArrowUp" || e.key == "ArrowDown") custObjs[0].vy =0;
+      if (e.key === "ArrowLeft" || e.key == "ArrowRight") custObjs[0].vx =0;
+    });
+    document.querySelector("#clear").addEventListener("click",(e)=>{
+      custObjs = [];
+    });
+
 
     // set clear color to black
     gl.clearColor(0.5, 0.5, 0.5, 1.0);
