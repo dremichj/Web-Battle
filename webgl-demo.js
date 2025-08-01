@@ -36,6 +36,10 @@ function main(){
     let cx = canvas.width/(cwidth*2);
     let cy = canvas.height/(cheight*2);
     phyObj.initGrid(2*cwidth,2*cheight);
+
+    const ob1 = new phyObj(0,0,0,0,1, canvas,"arrow",[]);
+    custObjs.push(ob1);
+
     // click 
     canvas.addEventListener('mousedown',(e)=>{
       mouseDx = e.offsetX;
@@ -45,7 +49,7 @@ function main(){
       let relx = (mouseDx/cx) - cwidth;
       let rely = -(mouseDy/cy) + cheight;
       const velV = phyObj.getLaunchV(mouseDx,mouseDy,e.offsetX,e.offsetY);
-      const ob = new phyObj(relx,rely,velV.Vx,velV.Vy,document.querySelector("#mass").value, canvas,document.querySelector("#shapetxt").value);
+      const ob = new phyObj(relx,rely,velV.Vx,velV.Vy,document.querySelector("#mass").value, canvas,document.querySelector("#shapetxt").value,[]);
       custObjs.push(ob);
     });
 
@@ -54,12 +58,13 @@ function main(){
       const x = parseFloat(document.querySelector("#coord-x").value);
       const y = parseFloat(document.querySelector("#coord-y").value);
       if (!isNaN(x) && !isNaN(y)) {
-        const ob = new phyObj(x,y,2,2,1,canvas,document.querySelector("#shapetxt").value);
+        const ob = new phyObj(x,y,2,2,1,canvas,document.querySelector("#shapetxt").value,[]);
         custObjs.push(ob);
       } else{
         console.log("IDIOT");
       }
     });
+    
     // starting
     /*for (let i =0; i<10; i++){
       custObjs.push(new phyObj(i,0,0,0,999,canvas,"square"));

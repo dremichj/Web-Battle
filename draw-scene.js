@@ -4,6 +4,7 @@
  * @param {Object} programInfo
  * @param {Object} buffers
  */
+import { getLineBuffs } from "./line-buffers.js";
 
 export function drawScene(gl, programInfo, buffers,custObjs) {
     gl.clearColor(0.1, 0.1, 0.1, 1.0);
@@ -98,7 +99,7 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
         switch (obj.shape){
             default:
                 positionBuffer = buffers.positionSquare;
-                colorBuffer = buffers.colorSquare
+                colorBuffer = buffers.colorSquare;
                 vertexCount = 4;
                 drawMode = gl.TRIANGLE_STRIP;
                 break;
@@ -117,6 +118,19 @@ export function drawScene(gl, programInfo, buffers,custObjs) {
                 }
                 vertexCount = 34;
                 drawMode = gl.TRIANGLE_FAN;
+                break;
+            case "arrow":
+                const corners = [
+                [-0.5, 0.5],   // top-left
+                [-1, -0.5],  // bottom-left
+                [0.5, 0.5],    // top-right
+                [0.5, -0.5],   // bottom-right
+                ];
+                const lineBuffs = getLineBuffs(gl,corners);
+                positionBuffer = lineBuffs.posBuff;
+                colorBuffer = lineBuffs.blueBuff;
+                vertexCount =4;
+                drawMode=gl.TRIANGLE_STRIP;
                 break;
 
         }

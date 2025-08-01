@@ -5,7 +5,7 @@ export class phyObj {
   static colGrid = [];
   static gridWidth;
   static gridHeight;
-  constructor(startX, startY, startVx, startVy, mass, canvas, shape){
+  constructor(startX, startY, startVx, startVy, mass, canvas, shape,corners){
     // movement
     this.x = startX;
     this.y = startY;
@@ -27,6 +27,7 @@ export class phyObj {
     
     // shape
     this.shape = shape;
+    this.corners = corners;
   }
 
   getX(){
